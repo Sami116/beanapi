@@ -54,7 +54,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         // 请求日志
         ServerHttpRequest request = exchange.getRequest();
-        // todo 先模拟一下
         String path = INTERFACE_HOST + request.getPath().value();
         String method = request.getMethod().toString();
         log.info("请求的唯一标识: " + request.getId());
@@ -89,9 +88,6 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
             return handleNoAuth(response);
         }
 
-//        if (!"sami".equals(accessKey)) {
-//            return handleNoAuth(response);
-//        }
         if (Long.parseLong(nonce) > 10000) {
             return handleNoAuth(response);
         }

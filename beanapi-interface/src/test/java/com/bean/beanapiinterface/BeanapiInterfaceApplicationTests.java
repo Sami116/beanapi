@@ -13,14 +13,5 @@ class BeanapiInterfaceApplicationTests {
     @Resource
     private BeanApiClient beanApiClient;
 
-    @Test
-    void contextLoads() {
-        String result = beanApiClient.getNameByGet("sami");
-        User user = new User();
-        user.setUsername("sami");
-        String usernameByPost = beanApiClient.getUsernameByPost(user);
-        System.out.println(result);
-        System.out.println(usernameByPost);
-    }
 
 }
