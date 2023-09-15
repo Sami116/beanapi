@@ -8,16 +8,17 @@ import cn.hutool.crypto.digest.Digester;
  */
 public class SignUtil {
 
-   /**
-    * 生成签名
-    *
-    * @param body
-    * @param secretKey
-    * @return
-    */
-   public static String genSign(String body, String secretKey) {
-      Digester sha256 = new Digester(DigestAlgorithm.SHA256);
-      String content = body + "." + secretKey;
-      return sha256.digestHex(content);
-   }
+    private static final Digester SHA1 = new Digester(DigestAlgorithm.SHA1);
+
+    /**
+     * 生成签名
+     *
+     * @param body
+     * @param secretKey
+     * @return
+     */
+    public static String genSign(String body, String secretKey) {
+        String content = body + "." + secretKey;
+        return SHA1.digestHex(content);
+    }
 }

@@ -1,11 +1,9 @@
-package com.bean.beanapigateway;
+package com.bean.beanapigateway.filter;
 
 import com.bean.beanapiclientsdk.utils.SignUtil;
 import com.bean.beanapicommon.model.entity.InterfaceInfo;
 import com.bean.beanapicommon.model.entity.User;
-import com.bean.beanapicommon.service.InnerInterfaceInfoService;
-import com.bean.beanapicommon.service.InnerUserInterfaceInfoService;
-import com.bean.beanapicommon.service.InnerUserService;
+import com.bean.beanapicommon.service.ApiBackendService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.reactivestreams.Publisher;
@@ -38,13 +36,7 @@ import java.util.List;
 public class CustomGlobalFilter implements GlobalFilter, Ordered {
 
     @DubboReference
-    private InnerUserService innerUserService;
-
-    @DubboReference
-    private InnerInterfaceInfoService innerInterfaceInfoService;
-
-    @DubboReference
-    private InnerUserInterfaceInfoService innerUserInterfaceInfoService;
+    private ApiBackendService apiBackendService;
 
     private static List<String> IP_WHITE_LIST = Arrays.asList("127.0.0.1");
 
@@ -80,7 +72,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         // 数据库中查询是否已分配给用户 accessKey
         User invokeUser = null;
         try {
-            invokeUser = innerUserService.getInvokeUser(accessKey);
+            invokeUser = apiBackendService.getInvokeUser(accessKey);
         } catch (Exception e) {
             log.error("getInvokeUser error", e);
         }
@@ -109,7 +101,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
         // 判断请求的接口是否存在,以及请求方法是否匹配
         InterfaceInfo interfaceInfo = null;
         try {
-            interfaceInfo = innerInterfaceInfoService.getInterfaceInfo(path, method);
+            interfaceInfo = apiBackendService.getInterfaceInfo(path, method);
         } catch (Exception e) {
             log.error("getInterfaceInfo error", e);
         }
@@ -149,7 +141,7 @@ public class CustomGlobalFilter implements GlobalFilter, Ordered {
                                     fluxBody.map(dataBuffer -> {
                                         // 调用成功，接口调用次数 + 1 invokeCount
                                         try {
-                                            innerUserInterfaceInfoService.invokeCount(interfaceInfoId,userId);
+                                            apiBackendService.invokeCount(interfaceInfoId, userId);
                                         } catch (Exception e) {
                                             log.error("invokeCount error", e);
                                         }

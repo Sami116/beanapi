@@ -1,6 +1,7 @@
-package com.bean.beanapi.exception;
+package com.bean.beanapicommon.exception;
 
-import com.bean.beanapi.common.ErrorCode;
+
+import com.bean.beanapicommon.common.ErrorCode;
 
 /**
  * 抛异常工具类

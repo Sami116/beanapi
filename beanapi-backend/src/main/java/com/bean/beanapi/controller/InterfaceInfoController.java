@@ -6,16 +6,18 @@ import com.bean.beanapi.annotation.AuthCheck;
 import com.bean.beanapi.common.*;
 import com.bean.beanapi.constant.CommonConstant;
 import com.bean.beanapi.exception.BusinessException;
+import com.bean.beanapi.mapper.UserInterfaceInfoMapper;
 import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoAddRequest;
 import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoInvokeRequest;
 import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.bean.beanapi.model.enums.InterfaceInfoStatusEnum;
 import com.bean.beanapi.service.InterfaceInfoService;
+import com.bean.beanapi.service.UserInterfaceInfoService;
 import com.bean.beanapi.service.UserService;
-import com.bean.beanapiclientsdk.client.BeanApiClient;
 import com.bean.beanapicommon.model.entity.InterfaceInfo;
 import com.bean.beanapicommon.model.entity.User;
+import com.bean.beanapicommon.model.entity.UserInterfaceInfo;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -24,11 +26,12 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.List;
 
 /**
  * 接口管理
- *
  */
 @RestController
 @RequestMapping("/interfaceInfo")
@@ -39,10 +42,14 @@ public class InterfaceInfoController {
     private InterfaceInfoService interfaceInfoService;
 
     @Resource
+    private UserInterfaceInfoService userInterfaceInfoService;
+
+    @Resource
     private UserService userService;
 
     @Resource
-    private BeanApiClient beanApiClient;
+    private UserInterfaceInfoMapper userInterfaceInfoMapper;
+
 
     // region 增删改查
 
@@ -212,18 +219,23 @@ public class InterfaceInfoController {
         if (idRequest == null || idRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 判断是否存在
+        // 判断要上线的接口是否存在
         long id = idRequest.getId();
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
         if (oldInterfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-        //判断该接口是否可以调用
-        com.bean.beanapiclientsdk.model.User user = new com.bean.beanapiclientsdk.model.User();
-        user.setUsername("test");
-        String username = beanApiClient.getUsernameByPost(user);
-        if (StringUtils.isBlank(username)) {
-            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "接口验证失败");
+        //测试调用该接口来判断接口是否正常运行
+        User loginUser = userService.getLoginUser(request);
+        String accessKey = loginUser.getAccessKey();
+        String secretKey = loginUser.getSecretKey();
+        //
+        Object res = invokeInterface(oldInterfaceInfo.getSdk(), "test", oldInterfaceInfo.getRequestParams(), accessKey, secretKey);
+        if (res == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (res.toString().contains("Error request")) {
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "系统接口内部异常");
         }
         //发布接口
         InterfaceInfo interfaceInfo = new InterfaceInfo();
@@ -247,7 +259,7 @@ public class InterfaceInfoController {
         if (idRequest == null || idRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        // 判断是否存在
+        // 判断要下线的接口是否存在
         long id = idRequest.getId();
         InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
         if (oldInterfaceInfo == null) {
@@ -262,7 +274,7 @@ public class InterfaceInfoController {
     }
 
     /**
-     * 测试调用
+     * 在接口开放平台测试调用提供的接口
      *
      * @param interfaceInfoInvokeRequest
      * @param request
@@ -270,30 +282,77 @@ public class InterfaceInfoController {
      */
     @PostMapping("/invoke")
     public BaseResponse<Object> invokeInterfaceInfo(@RequestBody InterfaceInfoInvokeRequest interfaceInfoInvokeRequest,
-                                                      HttpServletRequest request) {
+                                                    HttpServletRequest request) {
         if (interfaceInfoInvokeRequest == null || interfaceInfoInvokeRequest.getId() <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
 
         long id = interfaceInfoInvokeRequest.getId();
-        String userRequestParams = interfaceInfoInvokeRequest.getUserRequestParams();
-
-        // 判断是否存在
-        InterfaceInfo oldInterfaceInfo = interfaceInfoService.getById(id);
-        if (oldInterfaceInfo == null) {
+        // 判断被测试调用接口是否存在
+        InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
+        if (interfaceInfo == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }
-        if (oldInterfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue()) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR,"接口已关闭");
+        // 判断被调用接口是否在线
+        if (interfaceInfo.getStatus() != InterfaceInfoStatusEnum.ONLINE.getValue()) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "接口已关闭");
         }
         User loginUser = userService.getLoginUser(request);
         String accessKey = loginUser.getAccessKey();
         String secretKey = loginUser.getSecretKey();
-        BeanApiClient tempApiClient = new BeanApiClient(accessKey,secretKey);
-        Gson gson = new Gson();
-        com.bean.beanapiclientsdk.model.User user = gson.fromJson(userRequestParams, com.bean.beanapiclientsdk.model.User.class);
-        String usernameByPost = tempApiClient.getUsernameByPost(user);
-        return ResultUtils.success(usernameByPost);
+        // 判断用户是否有调用该接口的次数
+        QueryWrapper<UserInterfaceInfo> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userId", loginUser.getId());
+        queryWrapper.eq("interfaceInfoId", id);
+        UserInterfaceInfo userInterfaceInfo = userInterfaceInfoService.getOne(queryWrapper);
+        if (userInterfaceInfo == null) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "调用次数不足！");
+        }
+        Integer leftNum = userInterfaceInfo.getLeftNum();
+        if (leftNum <= 0) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "调用次数不足！");
+        }
+        // 发起接口调用
+        String userRequestParams = interfaceInfoInvokeRequest.getUserRequestParams();
+        Object res = invokeInterface(interfaceInfo.getSdk(), interfaceInfo.getName(), userRequestParams, accessKey, secretKey);
+        if (res == null) {
+            throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
+        }
+        if (res.toString().contains("Error request")) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "调用错误，请检查参数和接口调用次数！");
+        }
+        return ResultUtils.success(res);
+    }
+
+
+    public Object invokeInterface(String classPath, String methodName, String userRequestParams,
+                                  String accessKey, String secretKey) {
+
+        try {
+            Class<?> clientClass = Class.forName(classPath);
+            // 获取客户端类的有参构造器
+            Constructor<?> apiClientConstructor = clientClass.getConstructor(String.class, String.class);
+            // 构造一个客户端实例
+            Object apiClient = apiClientConstructor.newInstance(accessKey, secretKey);
+            // 找到要调用的方法
+            for (Method method : clientClass.getMethods()) {
+                if (method.getName().equals(methodName)) {
+                    // 获取方法的参数类型列表
+                    Class<?>[] parameterTypes = method.getParameterTypes();
+                    if (parameterTypes.length == 0) {
+                        // 方法没有参数，直接调用
+                        return method.invoke(apiClient);
+                    }
+                    Gson gson = new Gson();
+                    Object param = gson.fromJson(userRequestParams, parameterTypes[0]);
+                    return method.invoke(apiClient, param);
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessException(ErrorCode.SYSTEM_ERROR, "找不到可调用方法，请检查你的请求参数是否正确");
+        }
     }
 
 

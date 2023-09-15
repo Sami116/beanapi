@@ -1,9 +1,10 @@
-package com.bean.beanapi.exception;
+package com.bean.beanapicommon.exception;
 
-import com.bean.beanapi.common.ErrorCode;
+import com.bean.beanapicommon.common.ErrorCode;
 
 /**
  * 自定义异常类
+ *
  */
 public class BusinessException extends RuntimeException {
 

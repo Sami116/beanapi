@@ -8,9 +8,10 @@ import java.util.Date;
 
 /**
  * 用户调用接口关系
+ *
  * @TableName user_interface_info
  */
-@TableName(value ="user_interface_info")
+@TableName(value = "user_interface_info")
 @Data
 public class UserInterfaceInfo implements Serializable {
     /**
@@ -59,6 +60,12 @@ public class UserInterfaceInfo implements Serializable {
      */
     @TableLogic
     private Integer isDelete;
+
+    /**
+     * 乐观锁版本号
+     */
+    private Integer version;
+
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

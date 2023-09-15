@@ -1,8 +1,6 @@
 package com.bean.beanapiinterface;
 
-import com.bean.beanapiclientsdk.client.BeanApiClient;
-import com.bean.beanapiclientsdk.model.User;
-import org.junit.jupiter.api.Test;
+import com.bean.beanapiclientsdk.client.CommonApiClient;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.annotation.Resource;
@@ -11,7 +9,7 @@ import javax.annotation.Resource;
 class BeanapiInterfaceApplicationTests {
 
     @Resource
-    private BeanApiClient beanApiClient;
+    private CommonApiClient beanApiClient;
 
 
 }
