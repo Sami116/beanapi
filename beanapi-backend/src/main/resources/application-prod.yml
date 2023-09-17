@@ -18,11 +18,13 @@ spring:
     multipart:
       # 大小限制
       max-file-size: 10MB
+  # redis 配置
   redis:
-    database: 1
+    database: 2
     host: localhost
     port: 6379
     timeout: 5000
+  # rabbitmq 配置
   rabbitmq:
     host: 5672
     username: #

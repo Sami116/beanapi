@@ -1,7 +1,16 @@
 server:
   port: 8123
   servlet:
-    context-path: /api
+    context-path: /api/interface
+
+spring:
+  application:
+    name: beanapi-interface
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
 
 beanapi:
   client:

@@ -14,7 +14,7 @@ public class DailyWallpaperApiClient extends CommonApiClient{
      * 获取每日壁纸
      * @return
      */
-    public String getDayWallpaperUrl(){
+    public String getDailyWallpaperUrl(){
         return HttpRequest.post(GATEWAY_HOST+"/api/interface/day/wallpaper")
                 .addHeaders(getHeaderMap(""))
                 .execute().body();

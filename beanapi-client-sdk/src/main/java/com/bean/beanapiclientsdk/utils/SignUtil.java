@@ -17,7 +17,8 @@ public class SignUtil {
      * @param secretKey
      * @return
      */
-    public static String genSign(String body, String secretKey) {
+    public static String
+    genSign(String body, String secretKey) {
         String content = body + "." + secretKey;
         return SHA1.digestHex(content);
     }

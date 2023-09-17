@@ -17,7 +17,7 @@ public class NameApiClient extends CommonApiClient{
 
     public String getUsernameByPost(User user) {
         String json = JSONUtil.toJsonStr(user);
-        return HttpRequest.post(GATEWAY_HOST + "/api/name/user")
+        return HttpRequest.post(GATEWAY_HOST + "/api/interface/name/user")
                 .charset(StandardCharsets.UTF_8)
                 .addHeaders(getHeaderMap(json))
                 .body(json)

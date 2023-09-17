@@ -1,6 +1,10 @@
 spring:
   application:
     name: beanapi-backend
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -19,6 +23,14 @@ spring:
     multipart:
       # 大小限制
       max-file-size: 10MB
+
+  redis:
+    host: localhost
+    database: 2
+    port: 6379
+    timeout: 5000
+
+
 
 server:
   port: 8100
