@@ -14,23 +14,35 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
     gateway:
+      httpclient:
+        pool:
+          max-idle-time: 500
       routes:
         - id: beanapi_backend_route
           uri: lb://beanapi-backend
           predicates:
-          - Path=/api/**
+            - Path=/api/**
   redis:
     port: 6379
     database: 2
     host: localhost
     timeout: 5000
 
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway:
+            debug
+
 dubbo:
   application:
-    name: beanapi-gateway
+    name: dubbo
   protocol:
     name: dubbo
     port: -1
   registry:
-#    id: nacos-registry
+    #    id: nacos-registry
+    group: dubbo
     address: nacos://localhost:8848

@@ -23,4 +23,13 @@ public class NameController {
         return "POST 用户名是" + user.getUsername();
     }
 
+    /**
+     * 用于发布接口前，测试调用
+     * @return
+     */
+    @GetMapping("/testMethod")
+    public String test() {
+        return "接口运行正常";
+    }
+
 }

@@ -15,6 +15,7 @@
         <module>beanapi-gateway</module>
         <module>beanapi-interface</module>
         <module>beanapi-client-sdk</module>
+        <module>beanapi-thirdparty</module>
     </modules>
 
 </project>

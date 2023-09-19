@@ -1,0 +1,37 @@
+server:
+  port: 9100
+  servlet:
+    context-path: /api/third
+
+spring:
+  application:
+    name: beanapi-thirdparty
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+
+  redis:
+    database: 2
+    host: localhost
+    port: 6379
+    timeout: 5000
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtualHost: /
+    listener:
+      simple:
+        concurrency: 1
+        max-concurrency: 3
+        # ?????1??????????250?
+        prefetch: 1
+        # ????
+        acknowledge-mode: manual
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: false
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

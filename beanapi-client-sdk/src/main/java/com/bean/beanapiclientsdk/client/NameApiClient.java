@@ -28,7 +28,10 @@ public class NameApiClient extends CommonApiClient{
      * 用于发布接口前，测试调用
      * @return
      */
-    public String test() {
-        return "接口运行正常";
+    public String testMethod() {
+        return HttpRequest.get(GATEWAY_HOST + "/api/interface/name/testMethod")
+                .charset(StandardCharsets.UTF_8)
+                .addHeaders(getHeaderMap(""))
+                .execute().body();
     }
 }

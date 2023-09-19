@@ -2,11 +2,11 @@ package com.bean.beanapi.model.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
  * 已登录用户视图（脱敏）
- *
  **/
 @Data
 public class LoginUserVO implements Serializable {
@@ -15,6 +15,11 @@ public class LoginUserVO implements Serializable {
      * 用户 id
      */
     private Long id;
+
+    /**
+     * 用户账号
+     */
+    private String userAccount;
 
     /**
      * 用户昵称
@@ -35,6 +40,21 @@ public class LoginUserVO implements Serializable {
      * 用户角色：user/admin/ban
      */
     private String userRole;
+
+    /**
+     * 用户手机号
+     */
+    private String phone;
+
+    /**
+     * 用户性别 0 女 1 男
+     */
+    private Integer gender;
+
+    /**
+     * 用户邮箱
+     */
+    private String email;
 
     /**
      * 创建时间

@@ -21,7 +21,7 @@ import java.util.HashMap;
 @RequestMapping("/daily")
 public class DailyWallPaperController {
 
-    @PostMapping("/wallPaper")
+    @PostMapping("/wallpaper")
     public String getDailyWallPaperUrl() {
         HashMap<String, Object> paramMap = new HashMap<>();
         paramMap.put("format", "json");
@@ -33,5 +33,14 @@ public class DailyWallPaperController {
 
         return imageResponse.getData().getUrl();
 
+    }
+
+    /**
+     * 用于发布接口前，测试调用
+     * @return
+     */
+    @GetMapping("/testMethod")
+    public String test() {
+        return "接口运行正常";
     }
 }

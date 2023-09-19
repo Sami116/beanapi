@@ -15,7 +15,7 @@ public class DailyWallpaperApiClient extends CommonApiClient{
      * @return
      */
     public String getDailyWallpaperUrl(){
-        return HttpRequest.post(GATEWAY_HOST+"/api/interface/day/wallpaper")
+        return HttpRequest.post(GATEWAY_HOST+"/api/interface/daily/wallpaper")
                 .addHeaders(getHeaderMap(""))
                 .execute().body();
     }
@@ -24,8 +24,10 @@ public class DailyWallpaperApiClient extends CommonApiClient{
      * 用于发布接口前，测试调用
      * @return
      */
-    public String test() {
-        return "接口运行正常";
+    public String testMethod() {
+        return HttpRequest.get(GATEWAY_HOST+"/api/interface/daily/testMethod")
+                .addHeaders(getHeaderMap(""))
+                .execute().body();
     }
 
 

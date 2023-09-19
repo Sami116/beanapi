@@ -10,6 +10,9 @@
         <result property="userName" column="userName" jdbcType="VARCHAR"/>
         <result property="userAvatar" column="userAvatar" jdbcType="VARCHAR"/>
         <result property="userProfile" column="userProfile" jdbcType="VARCHAR"/>
+        <result property="phone" column="phone" jdbcType="CHAR"/>
+        <result property="gender" column="gender" jdbcType="TINYINT"/>
+        <result property="email" column="email" jdbcType="VARCHAR"/>
         <result property="userRole" column="userRole" jdbcType="VARCHAR"/>
         <result property="userPassword" column="userPassword" jdbcType="VARCHAR"/>
         <result property="accessKey" column="accessKey" jdbcType="VARCHAR"/>
@@ -20,8 +23,9 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,unionId,mpOpenId,
-        userName,userAvatar,userProfile,
+        id
+        ,unionId,mpOpenId,
+        userName,userAvatar,userProfile,phone,gender,email
         userRole,userPassword,accessKey,secretKey,createTime,updateTime,isDelete
     </sql>
 </mapper>

@@ -28,8 +28,6 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static com.bean.beanapicommon.constant.RabbitmqConstant.EXCHANGE_INTERFACE_CONSISTENT;
@@ -77,7 +75,7 @@ public class InterfaceInvokeFilter implements GatewayFilter, Ordered {
 
         log.info("InterfaceInvokeFilter");
         log.info("请求的唯一标识: " + request.getId());
-        log.info("请求路径: " + request.getPath().value());
+         log.info("请求路径: " + request.getPath().value());
         log.info("请求方法: " + request.getMethod());
         log.info("请求参数: " + request.getQueryParams());
         String sourceAddress = request.getRemoteAddress().getHostString();
@@ -133,6 +131,10 @@ public class InterfaceInvokeFilter implements GatewayFilter, Ordered {
             return handleNoAuth(response);
         }
 
+        // 如果是接口发布前的测试请求，直接发起接口调用，不用执行后面的调用次数统计逻辑
+        if (path.contains("/testMethod")) {
+            return chain.filter(exchange);
+        }
 
         // 判断请求的接口是否存在,以及请求方式是否匹配
         InterfaceInfo interfaceInfo = null;
@@ -145,7 +147,8 @@ public class InterfaceInvokeFilter implements GatewayFilter, Ordered {
             log.error("请求的接口不存在或请求方式不匹配!!!");
             return handleNoAuth(response);
         }
-        // todo 是否还有调用次数
+
+
         // 判断接口是否还有调用次数，并且统计接口调用，将二者转化成原子性操作(backend本地服务的本地事务实现)，解决二者数据一致性问题
         boolean result = false;
         try {
@@ -161,7 +164,6 @@ public class InterfaceInvokeFilter implements GatewayFilter, Ordered {
             log.error("接口剩余调用次数不足");
             return handleNoAuth(response);
         }
-
         //6.发起接口调用，网关路由实现
         Mono<Void> filter = chain.filter(exchange);
         // 请求转发，调用模拟接口 + 响应日志

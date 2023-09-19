@@ -15,8 +15,62 @@
     <name>beanapi-backend</name>
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
     <dependencies>
+
+        <dependency>
+            <groupId>com.bean</groupId>
+            <artifactId>beanapi-common</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.bean</groupId>
+            <artifactId>beanapi-client-sdk</artifactId>
+            <version>0.0.1</version>
+        </dependency>
+
+
+        <!--        dubbo整合nacos-->
+        <dependency>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo</artifactId>
+            <version>3.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.nacos</groupId>
+            <artifactId>nacos-client</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+
+        <!-- 阿里云oss依赖 -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>3.1.0</version>
+        </dependency>
+
+        <!-- 日期工具栏依赖 -->
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>2021.0.5.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
@@ -45,33 +99,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
-        <!-- elasticsearch-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-        </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.binarywang/wx-java-mp-spring-boot-starter -->
-<!--        <dependency>-->
-<!--            <groupId>com.github.binarywang</groupId>-->
-<!--            <artifactId>wx-java-mp-spring-boot-starter</artifactId>-->
-<!--            <version>4.4.0</version>-->
-<!--        </dependency>-->
+
+
         <!-- https://doc.xiaominfo.com/knife4j/documentation/get_start.html-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <version>3.0.3</version>
         </dependency>
-        <!-- https://cloud.tencent.com/document/product/436/10199-->
-<!--        <dependency>-->
-<!--            <groupId>com.qcloud</groupId>-->
-<!--            <artifactId>cos_api</artifactId>-->
-<!--            <version>5.6.89</version>-->
-<!--        </dependency>-->
+
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -121,45 +157,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.bean</groupId>
-            <artifactId>beanapi-client-sdk</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.dubbo</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>3.0.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba.nacos</groupId>
-            <artifactId>nacos-client</artifactId>
-            <version>2.1.2</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.bean</groupId>
-            <artifactId>beanapi-common</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.cloud</groupId>
-            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
-            <version>2021.0.5.0</version>
-        </dependency>
-
-        <!--基于Redis实现限流-响应式Redis模型-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-        </dependency>
-
     </dependencies>
 
     <build>

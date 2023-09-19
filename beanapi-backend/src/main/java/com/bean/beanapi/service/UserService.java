@@ -3,7 +3,9 @@ package com.bean.beanapi.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.bean.beanapi.model.dto.user.UserQueryRequest;
+import com.bean.beanapi.model.dto.user.UserUpdateRequest;
 import com.bean.beanapi.model.vo.LoginUserVO;
+import com.bean.beanapi.model.vo.UserDevKeyVO;
 import com.bean.beanapi.model.vo.UserVO;
 
 import java.util.List;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.bean.beanapicommon.model.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户服务
@@ -104,5 +107,62 @@ public interface UserService extends IService<User> {
      * @return
      */
     QueryWrapper<User> getQueryWrapper(UserQueryRequest userQueryRequest);
+
+    /**
+     * 发送邮箱/手机验证码
+     * @param emailNum
+     * @param captchaType
+     */
+    void sendCode(String emailNum,String captchaType);
+
+    /**
+     * 生成图像验证码
+     * @param request
+     * @param response
+     */
+    void getCaptcha(HttpServletRequest request, HttpServletResponse response);
+
+
+    /**
+     * 重新生成ak，sk
+     * @param request
+     * @return
+     */
+    UserDevKeyVO genkey(HttpServletRequest request);
+
+    /**
+     * 使用邮箱登录(后续会改造成使用手机号登录)
+     * @param emailNum
+     * @param emailCode
+     * @param request
+     * @param response
+     * @return
+     */
+    LoginUserVO userLoginByEmail(String emailNum, String emailCode, HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * 使用邮箱注册(后续会改造成使用手机号注册)
+     * @param emailNum
+     * @param emailCaptcha
+     * @return
+     */
+    long userEmailRegister(String emailNum, String emailCaptcha);
+
+    /**
+     * 上传用户头像
+     * @param file
+     * @param request
+     * @return
+     */
+    boolean uploadFileAvatar(MultipartFile file, HttpServletRequest request);
+
+    /**
+     * 更新用户
+     * @param userUpdateRequest
+     * @param request
+     * @return
+     */
+    boolean updateUser(UserUpdateRequest userUpdateRequest, HttpServletRequest request);
+
 
 }

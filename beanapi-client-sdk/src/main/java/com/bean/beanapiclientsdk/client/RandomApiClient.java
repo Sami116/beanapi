@@ -5,8 +5,8 @@ import cn.hutool.http.HttpRequest;
 /**
  * @author sami
  */
-public class RandomWordApiClient extends CommonApiClient {
-    public RandomWordApiClient(String accessKey, String secretKey) {
+public class RandomApiClient extends CommonApiClient {
+    public RandomApiClient(String accessKey, String secretKey) {
         super(accessKey, secretKey);
     }
 
@@ -35,9 +35,12 @@ public class RandomWordApiClient extends CommonApiClient {
 
     /**
      * 用于发布接口前，测试调用
+     *
      * @return
      */
-    public String test() {
-        return "接口运行正常";
+    public String testMethod() {
+        return HttpRequest.get(GATEWAY_HOST + "/api/interface/random/testMethod")
+                .addHeaders(getHeaderMap(""))
+                .execute().body();
     }
 }

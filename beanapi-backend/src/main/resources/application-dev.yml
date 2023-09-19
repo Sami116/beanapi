@@ -14,16 +14,6 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  # session 配置
-  session:
-    # 30 天过期
-    timeout: 2592000
-
-  servlet:
-    multipart:
-      # 大小限制
-      max-file-size: 10MB
-
   redis:
     host: localhost
     database: 2
@@ -54,10 +44,10 @@ mybatis-plus:
 
 dubbo:
   application:
-    name: beanapi-backend
+    name: dubbo
   protocol:
     name: dubbo
     port: -1
   registry:
-    id: nacos-registry
+    group: dubbo
     address: nacos://localhost:8848

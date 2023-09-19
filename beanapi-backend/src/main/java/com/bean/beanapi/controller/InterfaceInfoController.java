@@ -230,7 +230,7 @@ public class InterfaceInfoController {
         String accessKey = loginUser.getAccessKey();
         String secretKey = loginUser.getSecretKey();
         //
-        Object res = invokeInterface(oldInterfaceInfo.getSdk(), "test", oldInterfaceInfo.getRequestParams(), accessKey, secretKey);
+        Object res = invokeInterface(oldInterfaceInfo.getSdk(), "testMethod", oldInterfaceInfo.getRequestParams(), accessKey, secretKey);
         if (res == null) {
             throw new BusinessException(ErrorCode.NOT_FOUND_ERROR);
         }

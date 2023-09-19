@@ -8,7 +8,6 @@ import java.util.Date;
 
 /**
  * 用户
- *
  */
 @TableName(value = "user")
 @Data
@@ -54,6 +53,21 @@ public class User implements Serializable {
      * 用户简介
      */
     private String userProfile;
+
+    /**
+     * 用户手机号
+     */
+    private String phone;
+
+    /**
+     * 用户性别 0 女 1 男
+     */
+    private Integer gender;
+
+    /**
+     * 用户邮箱
+     */
+    private String email;
 
     /**
      * 用户角色：user/admin/ban
