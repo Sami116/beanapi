@@ -6,6 +6,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.json.JSONUtil;
 import com.bean.beanapiclientsdk.model.User;
 import com.bean.beanapiclientsdk.utils.SignUtil;
+import lombok.Data;
 
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
@@ -16,6 +17,8 @@ import java.util.Map;
  *
  * @author Sami
  */
+
+@Data
 public class CommonApiClient {
 
     protected String accessKey;
