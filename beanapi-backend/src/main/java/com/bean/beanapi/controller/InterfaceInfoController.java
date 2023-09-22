@@ -12,9 +12,13 @@ import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoInvokeRequest;
 import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoQueryRequest;
 import com.bean.beanapi.model.dto.interfaceinfo.InterfaceInfoUpdateRequest;
 import com.bean.beanapi.model.enums.InterfaceInfoStatusEnum;
+import com.bean.beanapi.model.vo.InterfaceInfoVO;
+import com.bean.beanapi.service.InterfaceChargingService;
 import com.bean.beanapi.service.InterfaceInfoService;
 import com.bean.beanapi.service.UserInterfaceInfoService;
 import com.bean.beanapi.service.UserService;
+import com.bean.beanapicommon.common.JwtUtils;
+import com.bean.beanapicommon.model.entity.InterfaceCharging;
 import com.bean.beanapicommon.model.entity.InterfaceInfo;
 import com.bean.beanapicommon.model.entity.User;
 import com.bean.beanapicommon.model.entity.UserInterfaceInfo;
@@ -22,10 +26,15 @@ import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -46,6 +55,9 @@ public class InterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private InterfaceChargingService interfaceChargingService;
 
     @Resource
     private UserInterfaceInfoMapper userInterfaceInfoMapper;
@@ -145,12 +157,35 @@ public class InterfaceInfoController {
      * @return
      */
     @GetMapping("/get")
-    public BaseResponse<InterfaceInfo> getInterfaceInfoById(long id) {
+    public BaseResponse<InterfaceInfo> getInterfaceInfoById(long id, HttpServletRequest request) {
         if (id <= 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
+        Long userId = JwtUtils.getUserIdByToken(request);
+        if (userId == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR);
+        }
+
         InterfaceInfo interfaceInfo = interfaceInfoService.getById(id);
-        return ResultUtils.success(interfaceInfo);
+        InterfaceCharging interfaceCharging = interfaceChargingService.getOne(new QueryWrapper<InterfaceCharging>().eq("interfaceId", id));
+        InterfaceInfoVO interfaceInfoVO = new InterfaceInfoVO();
+        BeanUtils.copyProperties(interfaceInfo, interfaceInfoVO);
+        //获取付费剩余调用次数
+        if (interfaceCharging != null) {
+            interfaceInfoVO.setCharging(interfaceCharging.getCharging());
+            interfaceInfoVO.setAvailablePieces(interfaceCharging.getAvailablePieces());
+            interfaceInfoVO.setChargingId(interfaceCharging.getId());
+        }
+        //获取免费剩余调用次数
+        QueryWrapper<UserInterfaceInfo> userInterfaceInfoQueryWrapper = new QueryWrapper<>();
+        userInterfaceInfoQueryWrapper.eq("userId", userId);
+        userInterfaceInfoQueryWrapper.eq("interfaceInfoId", id);
+        UserInterfaceInfo userInterfaceInfo = userInterfaceInfoService.getOne(userInterfaceInfoQueryWrapper);
+        if (userInterfaceInfo != null) {
+            interfaceInfoVO.setAvailablePieces(userInterfaceInfo.getLeftNum().toString());
+        }
+
+        return ResultUtils.success(interfaceInfoVO);
     }
 
     /**
@@ -352,6 +387,38 @@ public class InterfaceInfoController {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessException(ErrorCode.SYSTEM_ERROR, "找不到可调用方法，请检查你的请求参数是否正确");
+        }
+    }
+
+    /**
+     * sdk下载
+     *
+     * @param response
+     * @throws IOException
+     */
+    @GetMapping("/sdk")
+    public void getSdk(HttpServletResponse response) throws IOException {
+        // 获取要下载的文件
+        org.springframework.core.io.Resource resource = new ClassPathResource("beanapi-client-sdk-0.0.1.jar");
+        InputStream inputStream = resource.getInputStream();
+
+        // 设置响应头
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=beanapi-client-sdk-0.0.1.jar");
+
+        // 将文件内容写入响应
+        try (OutputStream out = response.getOutputStream()) {
+            byte[] buffer = new byte[4096];
+            int length;
+            while ((length = inputStream.read(buffer)) > 0) {
+                out.write(buffer, 0, length);
+            }
+            out.flush();
+        } catch (IOException e) {
+            // 处理异常
+            e.printStackTrace();
+        } finally {
+            inputStream.close();
         }
     }
 

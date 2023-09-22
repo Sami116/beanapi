@@ -142,14 +142,14 @@ public class UserInterfaceInfoServiceImpl extends ServiceImpl<UserInterfaceInfoM
         UserInterfaceInfo one = this.getOne(
                 new QueryWrapper<UserInterfaceInfo>()
                         .eq("userId", userId)
-                        .eq("interfaceId", interfaceId)
+                        .eq("interfaceInfoId", interfaceId)
         );
 
         if (one != null) { // 说明已经购买/获取过调用次数，需要往上面增加
             return this.update(
                     new UpdateWrapper<UserInterfaceInfo>()
-                            .eq("", userId)
-                            .eq("", interfaceId)
+                            .eq("userId", userId)
+                            .eq("interfaceInfoId", interfaceId)
                             .setSql("leftNum = leftNum + " + lockNum)
 
             );

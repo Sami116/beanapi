@@ -45,7 +45,7 @@ public class FileUploadUtil {
 
             //获取文件名称
             String fileName = file.getOriginalFilename();
-            //添加随机值
+            //添加随机值,防止文件重名
             String uuid = UUID.randomUUID().toString().replaceAll("-", "");
             fileName = uuid + fileName;
 

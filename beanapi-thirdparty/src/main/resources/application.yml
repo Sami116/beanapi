@@ -10,6 +10,11 @@ spring:
     nacos:
       discovery:
         server-addr: localhost:8848
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/bean_api_thirdparty
+    username: root
+    password: sa423429
 
   redis:
     database: 2
@@ -26,9 +31,9 @@ spring:
       simple:
         concurrency: 1
         max-concurrency: 3
-        # ?????1??????????250?
+        # 消费者预取 1 条数据到内存，默认为250条
         prefetch: 1
-        # ????
+        # 确定机制
         acknowledge-mode: manual
 
 mybatis-plus:

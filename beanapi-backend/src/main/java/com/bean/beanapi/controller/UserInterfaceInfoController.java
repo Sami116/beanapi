@@ -7,12 +7,16 @@ import com.bean.beanapi.common.*;
 import com.bean.beanapi.constant.CommonConstant;
 import com.bean.beanapi.constant.UserConstant;
 import com.bean.beanapi.exception.BusinessException;
+import com.bean.beanapi.model.dto.userInterfaceInfo.UpdateUserInterfaceInfoDTO;
 import com.bean.beanapi.model.dto.userInterfaceInfo.UserInterfaceInfoAddRequest;
 import com.bean.beanapi.model.dto.userInterfaceInfo.UserInterfaceInfoQueryRequest;
 import com.bean.beanapi.model.dto.userInterfaceInfo.UserInterfaceInfoUpdateRequest;
+import com.bean.beanapi.model.vo.UserInterfaceInfoVO;
+import com.bean.beanapi.service.InterfaceChargingService;
 import com.bean.beanapi.service.UserInterfaceInfoService;
 import com.bean.beanapi.service.UserService;
 
+import com.bean.beanapicommon.model.entity.InterfaceCharging;
 import com.bean.beanapicommon.model.entity.User;
 import com.bean.beanapicommon.model.entity.UserInterfaceInfo;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +41,9 @@ public class UserInterfaceInfoController {
 
     @Resource
     private UserService userService;
+
+    @Resource
+    private InterfaceChargingService interfaceChargingService;
 
 
     // region 增删改查
@@ -193,5 +200,47 @@ public class UserInterfaceInfoController {
         return ResultUtils.success(userInterfaceInfoPage);
     }
 
+    @GetMapping("/list/userId")
+    public BaseResponse<List<UserInterfaceInfoVO>> getInterfaceInfoByUserId(@RequestParam Long userId, HttpServletRequest request) {
+        List<UserInterfaceInfoVO> userInterfaceInfoVOList = userInterfaceInfoService.getInterfaceInfoByUserId(userId, request);
+        return ResultUtils.success(userInterfaceInfoVOList);
+    }
+
+    /**
+     * 给用户分配免费的调用次数
+     *
+     * @param updateUserInterfaceInfoDTO
+     * @param request
+     * @return
+     */
+    @PostMapping("/get/free")
+    public BaseResponse<Boolean> getFreeInterfaceCount(@RequestBody UpdateUserInterfaceInfoDTO updateUserInterfaceInfoDTO, HttpServletRequest request) {
+        Long interfaceId = updateUserInterfaceInfoDTO.getInterfaceId();
+        Long userId = updateUserInterfaceInfoDTO.getUserId();
+        Long lockNum = updateUserInterfaceInfoDTO.getLockNum();
+        if (interfaceId == null || userId == null || lockNum == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        if (lockNum > 100) {
+            throw new BusinessException(ErrorCode.OPERATION_ERROR, "您一次性获取的次数太多了");
+        }
+        synchronized (userId) {
+            User loginUser = userService.getLoginUser(request);
+            if (!userId.equals(loginUser.getId())) {
+                throw new BusinessException(ErrorCode.NO_AUTH_ERROR);
+            }
+            long interfaceCharging = interfaceChargingService.count(new QueryWrapper<InterfaceCharging>().eq("interfaceId", interfaceId));
+            if (interfaceCharging > 0) {
+                throw new BusinessException(ErrorCode.PARAMS_ERROR, "这个是付费接口噢!");
+            }
+            UserInterfaceInfo one = userInterfaceInfoService.getOne(new QueryWrapper<UserInterfaceInfo>().eq("userId", userId).eq("interfaceInfoId", interfaceId));
+            if (one != null && one.getLeftNum() >= 1000) {
+                throw new BusinessException(ErrorCode.OPERATION_ERROR, "您获取的次数太多了");
+            }
+
+            boolean b = userInterfaceInfoService.updateUserInterfaceInfo(updateUserInterfaceInfoDTO);
+            return ResultUtils.success(b);
+        }
+    }
 
 }

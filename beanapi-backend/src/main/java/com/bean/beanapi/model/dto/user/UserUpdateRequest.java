@@ -6,7 +6,6 @@ import lombok.Data;
 
 /**
  * 用户更新请求
- *
  */
 @Data
 public class UserUpdateRequest implements Serializable {
@@ -34,6 +33,11 @@ public class UserUpdateRequest implements Serializable {
      * 简介
      */
     private String userProfile;
+
+    /**
+     * 手机号
+     */
+    private String phone;
 
     /**
      * 用户角色：user/admin/ban

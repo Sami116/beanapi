@@ -125,6 +125,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 4. 插入数据
             User user = new User();
             user.setUserAccount(userAccount);
+            user.setUserName(userAccount);
             user.setUserPassword(encryptPassword);
             user.setAccessKey(accessKey);
             user.setSecretKey(secretKey);
@@ -258,8 +259,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求参数为空");
         }
         Long id = userQueryRequest.getId();
-        String unionId = userQueryRequest.getUnionId();
-        String mpOpenId = userQueryRequest.getMpOpenId();
         String userName = userQueryRequest.getUserName();
         String userProfile = userQueryRequest.getUserProfile();
         String userRole = userQueryRequest.getUserRole();
@@ -267,8 +266,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         String sortOrder = userQueryRequest.getSortOrder();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(id != null, "id", id);
-        queryWrapper.eq(StringUtils.isNotBlank(unionId), "unionId", unionId);
-        queryWrapper.eq(StringUtils.isNotBlank(mpOpenId), "mpOpenId", mpOpenId);
         queryWrapper.eq(StringUtils.isNotBlank(userRole), "userRole", userRole);
         queryWrapper.like(StringUtils.isNotBlank(userProfile), "userProfile", userProfile);
         queryWrapper.like(StringUtils.isNotBlank(userName), "userName", userName);
@@ -418,10 +415,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             //给用户分配调用接口的公钥和私钥ak,sk，保证复杂的同时要保证唯一
             String accessKey = DigestUtil.md5Hex(SALT + emailNum + RandomUtil.randomNumbers(5));
             String secretKey = DigestUtil.md5Hex(SALT + emailNum + RandomUtil.randomNumbers(8));
+            // 生成一个初始密码
+            String initialPassword = DigestUtils.md5DigestAsHex((SALT + emailNum).getBytes());
 
             // 插入数据
             User user = new User();
             user.setUserName(emailNum);
+            user.setUserAccount(emailNum);
+            user.setUserPassword(initialPassword);
             user.setEmail(emailNum);
             user.setAccessKey(accessKey);
             user.setSecretKey(secretKey);

@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class RandomController {
 
     @GetMapping("/word")
-    public String getRandomWork(){
+    public String getRandomWord(){
         HttpResponse response = HttpRequest.get("https://tenapi.cn/v2/yiyan")
                 .execute();
         return response.body();

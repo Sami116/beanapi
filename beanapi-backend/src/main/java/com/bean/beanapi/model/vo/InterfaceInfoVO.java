@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class InterfaceInfoVO extends InterfaceInfo implements Serializable {
 
     /**
-     * 调用次数
+     * 被调用次数
      */
     private Integer totalNum;
 
