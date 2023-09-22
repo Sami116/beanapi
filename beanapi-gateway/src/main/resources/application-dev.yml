@@ -1,0 +1,48 @@
+server:
+  port: 8090
+  servlet:
+    # cookie 30 天过期
+    session:
+      cookie:
+        max-age: 2592000
+
+spring:
+  application:
+    name: beanapi-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+    gateway:
+      httpclient:
+        pool:
+          max-idle-time: 500
+      routes:
+        - id: beanapi_backend_route
+          uri: lb://beanapi-backend
+          predicates:
+            - Path=/api/**
+  redis:
+    port: 6379
+    database: 2
+    host: localhost
+    timeout: 5000
+
+logging:
+  level:
+    org:
+      springframework:
+        cloud:
+          gateway:
+            debug
+
+dubbo:
+  application:
+    name: dubbo
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    #    id: nacos-registry
+    group: dubbo
+    address: nacos://localhost:8848
