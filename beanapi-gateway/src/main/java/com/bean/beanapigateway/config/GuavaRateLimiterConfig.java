@@ -4,6 +4,9 @@ import com.google.common.util.concurrent.RateLimiter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author sami
+ */
 @Configuration
 public class GuavaRateLimiterConfig {
 

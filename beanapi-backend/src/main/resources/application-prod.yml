@@ -69,9 +69,10 @@ mybatis-plus:
 
 dubbo:
   application:
-    name: beanapi-backend
+    name: dubbo
   protocol:
     name: dubbo
     port: -1
   registry:
+    group: dubbo
     address: nacos://localhost:8848

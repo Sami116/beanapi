@@ -15,6 +15,9 @@ import java.util.concurrent.TimeUnit;
 import static com.bean.beanapicommon.constant.RedisConstant.LOGINCODEPRE;
 
 
+/**
+ * @author sami
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

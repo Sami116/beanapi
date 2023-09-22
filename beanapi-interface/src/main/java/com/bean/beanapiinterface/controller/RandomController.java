@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 
+/**
+ * @author sami
+ */
 @RestController
 @RequestMapping("/random")
 public class RandomController {

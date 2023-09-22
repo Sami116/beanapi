@@ -18,6 +18,9 @@ import static com.bean.beanapicommon.constant.RabbitmqConstant.QUEUE_LOGIN_SMS;
 
 
 
+/**
+ * @author sami
+ */
 @Component
 @Slf4j
 public class MessageListener {

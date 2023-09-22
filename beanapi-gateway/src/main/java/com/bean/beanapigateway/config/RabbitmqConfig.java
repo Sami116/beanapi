@@ -12,6 +12,7 @@ import static com.bean.beanapicommon.constant.RabbitmqConstant.*;
 
 /**
  * 接口数据一致性补偿消息相关队列定义
+ * @author sami
  */
 @Configuration
 @Slf4j
