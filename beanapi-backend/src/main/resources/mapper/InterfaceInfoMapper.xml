@@ -19,6 +19,7 @@
         <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
         <result property="isDelete" column="isDelete" jdbcType="TINYINT"/>
         <result property="requestParams" column="requestParams" jdbcType="VARCHAR"/>
+        <result property="parameterExample" column="parameterExample" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -26,6 +27,6 @@
         ,name,description,
         url,requestParams,requestHeader,responseHeader,
         status,method,userId,sdk,
-        createTime,updateTime,isDelete
+        createTime,updateTime,isDelete,parameterExample
     </sql>
 </mapper>

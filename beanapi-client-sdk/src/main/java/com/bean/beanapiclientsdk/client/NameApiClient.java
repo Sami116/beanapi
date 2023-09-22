@@ -7,6 +7,7 @@ import com.bean.beanapiclientsdk.model.User;
 import java.nio.charset.StandardCharsets;
 
 /**
+ * 获取名称接口下线维护中
  * @author sami
  */
 public class NameApiClient extends CommonApiClient{

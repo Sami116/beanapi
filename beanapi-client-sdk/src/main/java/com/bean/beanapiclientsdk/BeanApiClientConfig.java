@@ -1,5 +1,6 @@
 package com.bean.beanapiclientsdk;
 
+import com.bean.beanapiclientsdk.client.CommonApiClient;
 import com.bean.beanapiclientsdk.client.DailyWallpaperApiClient;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -20,8 +21,8 @@ public class BeanApiClientConfig {
     private String secretKey;
 
     @Bean
-    public DailyWallpaperApiClient dailyWallpaperApiClient() {
-        return new DailyWallpaperApiClient(accessKey, secretKey);
+    public CommonApiClient dailyWallpaperApiClient() {
+        return new CommonApiClient(accessKey, secretKey);
     }
 
 }
