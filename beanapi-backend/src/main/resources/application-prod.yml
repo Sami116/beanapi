@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 43.143.163.96:8848
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -75,4 +75,4 @@ dubbo:
     port: -1
   registry:
     group: dubbo
-    address: nacos://localhost:8848
+    address: nacos://43.143.163.96:8848

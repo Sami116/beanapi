@@ -13,7 +13,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 127.0.0.1:8848
+        server-addr: 43.143.163.96:8848
     gateway:
       httpclient:
         pool:
@@ -46,4 +46,4 @@ dubbo:
   registry:
     #    id: nacos-registry
     group: dubbo
-    address: nacos://localhost:8848
+    address: nacos://43.143.163.96:8848
