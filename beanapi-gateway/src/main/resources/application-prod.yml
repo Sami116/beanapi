@@ -5,7 +5,7 @@ server:
     session:
       cookie:
         max-age: 2592000
-#  address: http://43.143.163.96
+        domain: 43.143.163.96
 
 spring:
   application:

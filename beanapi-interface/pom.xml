@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.bean</groupId>
     <artifactId>beanapi-interface</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <name>beanapi-interface</name>
     <description>beanapi-interface</description>
     <properties>

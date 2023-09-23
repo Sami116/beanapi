@@ -24,7 +24,7 @@ public class CommonApiClient {
     protected String accessKey;
     protected String secretKey;
 
-    protected static final String GATEWAY_HOST = "http://localhost:8090";
+    protected static final String GATEWAY_HOST = "http://43.143.163.96:8090";
 
     public CommonApiClient(String accessKey, String secretKey) {
         this.accessKey = accessKey;
