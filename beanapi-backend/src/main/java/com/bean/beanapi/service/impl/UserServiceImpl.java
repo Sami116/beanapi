@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 盐值，混淆密码
      */
-    private static final String SALT = "sami";
+    private static final String SALT = "Sami";
 
     /**
      * 图片验证码 redis 前缀
