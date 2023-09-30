@@ -29,7 +29,7 @@ public class MessageListener {
     private StringRedisTemplate stringRedisTemplate;
 
 
-    //监听queue_sms_code队列，实现接口统计功能
+    //监听queue_sms_code队列，实现验证码发送功能
     //生产者是懒加载机制，消费者是饿汉加载机制，二者机制不对应，所以消费者要自行创建队列并加载，否则会报错
     @RabbitListener(queuesToDeclare = { @Queue(QUEUE_LOGIN_SMS)})
     public void receiveSms(SmsMessage smsMessage, Message message, Channel channel) throws IOException {
