@@ -8,9 +8,9 @@ spring:
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://43.143.163.96:3306/bean_api
-    username: root
-    password: sa423429
+    url: xxx
+    username: xxx
+    password: xxx
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
@@ -32,8 +32,8 @@ spring:
   rabbitmq:
     host: 43.143.163.96
     port: 5672
-    username: sami
-    password: sa423429
+    username: xxx
+    password: xxx
     virtualHost: /
       #    #确认消息已发送到交换机(Exchange)
       #    publisher-confirm-type: correlated

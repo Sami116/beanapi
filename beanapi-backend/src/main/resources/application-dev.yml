@@ -9,8 +9,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bean_api
-    username: root
-    password: sa423429
+    username: xxx
+    password: xxx
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher

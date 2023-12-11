@@ -34,13 +34,13 @@ public class MessageListener {
     @RabbitListener(queuesToDeclare = { @Queue(QUEUE_LOGIN_SMS)})
     public void receiveSms(SmsMessage smsMessage, Message message, Channel channel) throws IOException {
         log.info("监听到消息啦，内容是："+smsMessage);
-        channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
 
         //发送邮箱验证码
         SendMessageOperation messageOperation = new SendMessageOperation();
         String targetEmail = smsMessage.getEmail();
         messageOperation.sendMessage(targetEmail,stringRedisTemplate);
 
+        channel.basicAck(message.getMessageProperties().getDeliveryTag(),false);
     }
 
 

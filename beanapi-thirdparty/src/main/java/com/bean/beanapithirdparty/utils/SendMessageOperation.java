@@ -23,8 +23,9 @@ import static com.bean.beanapicommon.constant.RedisConstant.LOGINCODEPRE;
 @AllArgsConstructor
 public class SendMessageOperation {
 
-    private SimpleEmail mail=new SimpleEmail();
-    public  void sendMessage(String targetEmail, RedisTemplate<String,String> redisTemplate)  {
+    private SimpleEmail mail = new SimpleEmail();
+
+    public void sendMessage(String targetEmail, RedisTemplate<String, String> redisTemplate) {
         try {
             // 设置邮箱服务器信息
             mail.setSslSmtpPort(QQEmailConfig.PORT);
@@ -42,9 +43,9 @@ public class SendMessageOperation {
 
             String code = RandomUtil.getFourBitRandom();
             //设置数据的5分钟有效期限
-            redisTemplate.opsForValue().set(LOGINCODEPRE+targetEmail,code,5,TimeUnit.MINUTES);
+            redisTemplate.opsForValue().set(LOGINCODEPRE + targetEmail, code, 5, TimeUnit.MINUTES);
             // 设置邮件内容
-            mail.setMsg("您的注册 or 登录 验证码为："+code+",验证码5分钟内有效!!!"+"[Bean API]");
+            mail.setMsg("您的注册 or 登录 验证码为：" + code + ",验证码5分钟内有效!!!" + "[Bean API]");
             // 设置邮件发送时间
             mail.setSentDate(new Date());
             // 发送邮件
