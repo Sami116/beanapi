@@ -4,7 +4,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: 43.143.163.96:8848
+        server-addr: localhost:8848
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
@@ -30,7 +30,7 @@ spring:
     timeout: 5000
   # rabbitmq 配置
   rabbitmq:
-    host: 43.143.163.96
+    host: localhost
     port: 5672
     username: xxx
     password: xxx
@@ -56,7 +56,7 @@ server:
     session:
       cookie:
         max-age: 2592000
-        domain: 43.143.163.96
+        domain: localhost
 
 mybatis-plus:
   configuration:
@@ -77,4 +77,13 @@ dubbo:
     port: -1
   registry:
     group: dubbo
-    address: nacos://43.143.163.96:8848
+    address: nacos://localhost:8848
+
+#阿里云对象存储
+aliyun:
+  oss:
+    file:
+      endpoint: xxx
+      keyid: xxx
+      keysecret: xxx
+      bucketname: xxx

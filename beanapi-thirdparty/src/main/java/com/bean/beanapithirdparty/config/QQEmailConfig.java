@@ -1,5 +1,6 @@
 package com.bean.beanapithirdparty.config;
 
+import lombok.Data;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -9,20 +10,17 @@ import org.springframework.context.annotation.PropertySource;
 /**
  * @author sami
  */
-@PropertySource("classpath:email.properties")
-@ConfigurationProperties(prefix = "msm")
 @Configuration
+@ConfigurationProperties(prefix = "msm")
+@Data
 public class QQEmailConfig implements InitializingBean {
-    @Value("${msm.email}")
+
     private String email;
 
-    @Value("${msm.host}")
     private String host;
 
-    @Value("${msm.port}")
     private String port;
 
-    @Value("${msm.password}")
     private String password;
 
     public static String EMAIL;

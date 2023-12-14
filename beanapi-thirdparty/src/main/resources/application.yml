@@ -4,6 +4,8 @@ server:
     context-path: /api/third
 
 spring:
+  profiles:
+    active: local
   application:
     name: beanapi-thirdparty
   cloud:
@@ -13,8 +15,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://localhost:3306/bean_api_thirdparty
-    username: root
-    password: sa423429
+    username: xxx
+    password: xxx
 
   redis:
     database: 2
@@ -36,7 +38,15 @@ spring:
         # 确定机制
         acknowledge-mode: manual
 
+
 mybatis-plus:
   configuration:
     map-underscore-to-camel-case: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#email
+msm:
+  email: xxx
+  host: xxx
+  port: xxx
+  password: xxx

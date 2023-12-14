@@ -5,7 +5,6 @@ server:
     session:
       cookie:
         max-age: 2592000
-        domain: 43.143.163.96
 
 spring:
   application:
@@ -46,4 +45,4 @@ dubbo:
   registry:
     #    id: nacos-registry
     group: dubbo
-    address: nacos://43.143.163.96:8848
+    address: nacos://localhost:8848
