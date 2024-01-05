@@ -53,13 +53,13 @@
 
 ## 项目模块
 
-- api-frontend ：为项目前端，前端项目启动具体看readme.md文档
-- api-common ：为公共封装类（如公共实体、公共常量，统一响应实体，统一异常处理）
-- api-backend ：为接口管理平台，主要包括用户、接口相关的功能
-- api-gateway ：为网关服务，**涉及到网关限流，统一鉴权，统一日志处理，接口统计，接口数据一致性处理**
-- api-third-party：为第三方服务，主要涉及到腾讯云短信、支付宝沙箱支付功能
-- api-interface：为接口服务，提供可供调用的接口
-- api-sdk：提供给开发者的SDK
+- beanapi-frontend ：为项目前端，前端项目启动具体看readme.md文档
+- beanapi-common ：为公共封装类（如公共实体、公共常量，统一响应实体，统一异常处理）
+- beanapi-backend ：为接口管理平台，主要包括用户、接口相关的功能
+- beanapi-gateway ：为网关服务，**涉及到网关限流，统一鉴权，统一日志处理，接口统计，接口数据一致性处理**
+- beanapi-third-party：为第三方服务，主要涉及到腾讯云短信、支付宝沙箱支付功能
+- beanapi-interface：为接口服务，提供可供调用的接口
+- beanapi-client-sdk：提供给开发者的SDK
 
 
 ## 快速上手
@@ -68,15 +68,15 @@
 
 1. 将各模块配置修改成你自己本地的端口、账号、密码
 2. 启动Nacos、Mysql、Redis、RabbitMq
-3. 将公共服务 api-common 以及客户端 SDK 安装到本地仓库
+3. 将公共服务 beanapi-common 以及客户端 SDK 安装到本地仓库
 4. 按顺序启动服务
 
 服务启动顺序参考：
 
-1. api-backend
-2. api-gateway
-3. api-third-party
-4. api-interface
+1. beanapi-backend
+2. beanapi-gateway
+3. beanapi-thirdparty
+4. beanapi-interface
 
 ### 前端
 
